@@ -1,7 +1,7 @@
 {
   "hosting": {
     "target": "frontend-intercorp",
-    "public": "/",
+    "public": "dist/frontend-intercorp",
     "ignore": [
       "**/.*"
     ],
