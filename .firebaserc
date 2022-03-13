@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "frontend-intercorp": {
+      "hosting": {
+        "frontend-intercorp": [
+          "frontend-intercorp"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "frontend-intercorp"
+  }
+}
