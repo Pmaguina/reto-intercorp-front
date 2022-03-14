@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collectionData, collection } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
+import { Cliente } from '../models/cliente.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientesService {
 
+  private dbPath = '/clientes';
 
-  constructor(private firestore: Firestore) { 
+  clientesRef: AngularFireList<Cliente>;
 
+  constructor(private db: AngularFireDatabase) { 
+    this.clientesRef = db.list(this.dbPath)
   }
 
-  agregarCliente(cliente: any): Promise<any> {
-    
-    return null;
+  getAll(): AngularFireList<Cliente> {
+    console.log("Clientes: " + this.clientesRef);
+    return this.clientesRef;
   }
 
-  listarClientes(): Observable<any> {
-    
-    const collection1 = collection(this.firestore, "clientes");
-    return collectionData(collection1);
+  create(cliente: Cliente): any {
+    return this.clientesRef.push(cliente);
   }
 }

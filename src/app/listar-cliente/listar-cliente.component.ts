@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { ClientesService } from 'src/app/servicio/clientes.service';
+import { Cliente } from 'src/app/models/cliente.model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-listar-cliente',
@@ -11,25 +13,23 @@ import { ClientesService } from 'src/app/servicio/clientes.service';
 
 export class ListarClienteComponent implements OnInit {
 
-  clientes: any[] = [];
+  clientes?: Cliente[];
 
-  constructor(private _clienteService: ClientesService) {
-  }
+  constructor(private _clienteService: ClientesService) {}
 
   ngOnInit(): void {
 	  this.getClientes()
   }
 
   getClientes() {
-    this._clienteService.listarClientes().subscribe(data => {
-      this.clientes = [];
-      data.forEach((element: any) => {
-        this.clientes.push({
-          id: element.payload.doc.id,
-          ...element.payload.doc.data()
-        })
-      });
-      console.log(this.clientes);
+    this._clienteService.getAll().snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c =>
+          ({ key: c.payload.key, ...c.payload.val() })
+        )
+      )
+    ).subscribe(data => {
+      this.clientes = data;
     });
   }
 }

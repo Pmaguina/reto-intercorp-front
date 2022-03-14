@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { ClientesService } from 'src/app/servicio/clientes.service';
+import { Cliente } from 'src/app/models/cliente.model';
+
 
 @Component({
   selector: 'app-crear-cliente',
@@ -13,36 +14,38 @@ export class CrearClienteComponent implements OnInit {
   createCliente: FormGroup;
   titulo = 'Crear Cliente';
   loading = false;
-  constructor(
-    private fb: FormBuilder,
-    private _clienteService: ClientesService,
-    private router: Router,
-    private toastr: ToastrService) { 
+  submitted = true;
 
+  cliente: Cliente = new Cliente();
+
+  constructor(
+    private _clienteService: ClientesService,
+    private router: Router) { 
       
+      this.createCliente = new FormGroup({
+        nombre: new FormControl(),
+        apellido: new FormControl(),
+        edad: new FormControl(),
+        fecNac: new FormControl()
+      });
     }
 
   ngOnInit(): void {
-	  this.createCliente = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      edad: ['', Validators.required],
-      fecNacimiento: ['', Validators.required]
-    })
   }
 
   agregarCliente() {
-    const cliente: any = {
+    
+    this.cliente = {
       nombre: this.createCliente.value.nombre,
       apellido: this.createCliente.value.apellido,
       edad: this.createCliente.value.edad,
-      fecNac: this.createCliente.value.fecNacimiento
-    }
+      fecNac: this.createCliente.value.fecNac,
+    } 
+
+    console.log("nombre: " + this.createCliente.value.nombre);
+
     this.loading = true;
-    this._clienteService.agregarCliente(cliente).then(() => {
-      this.toastr.success('El cliente fue registrado con exito!', 'Cliente Registrado', {
-        positionClass: 'toast-bottom-right'
-      });
+    this._clienteService.create(this.cliente).then(() => {
       this.loading = false;
       this.router.navigate(['/listar-cliente']);
     }).catch(error => {
