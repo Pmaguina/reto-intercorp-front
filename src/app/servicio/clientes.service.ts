@@ -16,7 +16,6 @@ export class ClientesService {
   }
 
   getAll(): AngularFireList<Cliente> {
-    console.log("Clientes: " + this.clientesRef);
     return this.clientesRef;
   }
 

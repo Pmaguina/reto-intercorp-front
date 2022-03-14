@@ -3,8 +3,8 @@
         <div class="card-body">
             <span class="h3">Listado de Clientes</span>
             <button class="btn btn-dark btn-lg float-right" routerLink="/crear-cliente">Crear</button>
-            <h5 style="margin-top: 30px;" *ngIf="clientes.length == 0">No hay datos para mostrar</h5>
-            <table *ngIf="clientes.length > 0" class="table table-striped mt-5">
+
+            <table class="table table-striped mt-5">
                 <thead>
                   <tr>
                     <th>Nombre</th>
@@ -22,6 +22,19 @@
                   </tr>
                 </tbody>
             </table>
+            
+        </div>
+        <div class="card-body">
+          <span class="h3">Promedio de edad de Clientes</span>
+          <tbody>
+            <td>{{promedioEdad}}</td>
+          </tbody>
+        </div>
+        <div class="card-body">
+          <span class="h3">Desviación estándar de las edades de Clientes</span>
+          <tbody>
+            <td>{{desvEstandar}}</td>
+          </tbody>
         </div>
     </div>
 </div>

@@ -14,11 +14,14 @@ import { map } from 'rxjs/operators';
 export class ListarClienteComponent implements OnInit {
 
   clientes?: Cliente[];
+  promedioEdad?: Number;
+  desvEstandar?: Number;
 
   constructor(private _clienteService: ClientesService) {}
 
   ngOnInit(): void {
 	  this.getClientes()
+    
   }
 
   getClientes() {
@@ -30,6 +33,36 @@ export class ListarClienteComponent implements OnInit {
       )
     ).subscribe(data => {
       this.clientes = data;
+      this.calcularPromedioEdades(this.clientes)
     });
+
   }
+
+  calcularPromedioEdades(listClientes: Cliente[]) {
+    
+    let sum = 0;
+    let sumatoria = 0;
+    let varianza = 0;
+
+    if(listClientes.length > 0) {
+      listClientes.forEach(item => {
+        sum = sum + parseInt(item.edad);
+      });
+  
+      this.promedioEdad = sum / listClientes.length;
+
+      listClientes.forEach(item => {
+        sumatoria = Math.pow(parseInt(item.edad) - (sum / listClientes.length), 2);
+        varianza = varianza + sumatoria;
+      });
+
+      varianza = varianza / (listClientes.length - 1);
+      this.desvEstandar = Math.sqrt(varianza);
+
+    } else {
+      this.promedioEdad = 0,
+      this.desvEstandar = 0
+    }
+  }
+  
 }
